@@ -561,6 +561,21 @@
         .btn:hover { background: var(--primary-dark); transform: scale(1.02); }
         .btn-danger { background: #8B3A3A; }
         .btn-danger:hover { background: #6B1F1F; }
+        
+        .drop-zone {
+            border: 2px dashed var(--primary-light);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            background: var(--cream);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .drop-zone.drag-over {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+        .drop-zone i { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
 
         /* Contact with Live Map */
         .contact-wrapper {
@@ -762,7 +777,7 @@
     </div>
 </section>
 
-<!-- CONTACT PAGE -->
+<!-- CONTACT PAGE with Updated Map Link -->
 <section id="contact-page" class="page-section">
     <div class="section">
         <h2 class="section-title" data-en="Visit Our Studio" data-te="మా స్టూడియోను సందర్శించండి">Visit Our Studio</h2>
@@ -777,10 +792,10 @@
                     <p data-en="Monday - Saturday: 9:30 AM - 8:00 PM" data-te="సోమవారం - శనివారం: 9:30 AM - 8:00 PM">Monday - Saturday: 9:30 AM - 8:00 PM<br><span data-en="Sunday: 10:00 AM - 2:00 PM" data-te="ఆదివారం: 10:00 AM - 2:00 PM">Sunday: 10:00 AM - 2:00 PM</span></p>
                     <p><i class="fas fa-calendar-check"></i> <span data-en="Call for appointment outside hours" data-te="సమయం మించి అపాయింట్మెంట్ కోసం కాల్ చేయండి">Call for appointment outside hours</span></p>
                 </div>
-                <a href="https://maps.app.goo.gl/GurE5J9d2ia14tpW7" target="_blank" class="location-link"><i class="fas fa-directions"></i> <span data-en="Open in Google Maps" data-te="గూగుల్ మ్యాప్స్లో తెరవండి">Open in Google Maps</span></a>
+                <a href="https://maps.app.goo.gl/GQjkCzj1f8GS2ALM9?g_st=aw" target="_blank" class="location-link"><i class="fas fa-directions"></i> <span data-en="Open in Google Maps" data-te="గూగుల్ మ్యాప్స్లో తెరవండి">Open in Google Maps</span></a>
             </div>
             <div class="map-card">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3818.6586170639973!2d81.837000!3d16.578000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37c3f8a7b8c9d1%3A0x5e8b7c9d2e4f6a8b!2sHX9X%2BV37%2C%20Bhaskar%20Nagar%20Colony%2C%20Amalapuram%2C%20Andhra%20Pradesh%20533201!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3824.140007118131!2d81.997448!3d16.5694589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37e5b7f9b70793%3A0xd57801a03d78b767!2sSRI%20House!5e0!3m2!1sen!2sin!4v1780332506485!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 <div style="padding:1rem; text-align:center; background:white;">
                     <p><i class="fas fa-female"></i> <span data-en="Ladies Exclusive Section" data-te="లేడీస్ ఎక్స్క్లూజివ్ సెక్షన్">Ladies Exclusive Section</span><br>
                     <i class="fas fa-parking"></i> <span data-en="Ample Parking Available" data-te="తగినంత పార్కింగ్ సౌకర్యం">Ample Parking Available</span><br>
@@ -857,7 +872,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
 });
 document.getElementById('mobileMenu').onclick = () => document.getElementById('navLinks').classList.toggle('show');
 
-// ========== IMAGE COMPRESSION FUNCTION ==========
 async function compressImage(file, maxWidth = 1200, quality = 0.8) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -889,7 +903,6 @@ async function compressImage(file, maxWidth = 1200, quality = 0.8) {
     });
 }
 
-// Load Shop Images (Floating Bar)
 async function loadShopImages() {
     try {
         const snapshot = await db.collection('shop_images').orderBy('timestamp', 'desc').get();
@@ -909,7 +922,6 @@ async function loadShopImages() {
     } catch(e) { console.log("Shop images error:", e); }
 }
 
-// Load Shop Gallery Section Images
 async function loadShopGalleryImages() {
     try {
         const snapshot = await db.collection('shop_gallery_images').orderBy('timestamp', 'desc').get();
@@ -933,7 +945,6 @@ async function loadShopGalleryImages() {
 
 window.closeShopModal = () => document.getElementById('shopModal').style.display = 'none';
 
-// Load Stitching & Reference Designs
 async function loadDesigns() {
     try {
         const snapshot = await db.collection('tailor_designs').orderBy('timestamp', 'desc').get();
@@ -967,8 +978,38 @@ window.showDetail = (img, title, desc) => {
 window.closeModal = () => document.getElementById('modal').classList.remove('open');
 function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
 
-// ========== ADMIN PANEL - MODIFIED WITH 3 SEPARATE SECTIONS ==========
+// ========== ADMIN PANEL WITH DRAG AND DROP ==========
 document.getElementById('adminBtn').onclick = (e) => { e.preventDefault(); showAdminPanel(); };
+
+function createDragDropZone(zoneId, fileInputId, previewId, onFileSelect) {
+    const zone = document.getElementById(zoneId);
+    if (!zone) return;
+    const fileInput = document.getElementById(fileInputId);
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            fileInput.files = files;
+            if (onFileSelect) onFileSelect(files[0], previewId);
+        }
+    });
+    zone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length && onFileSelect) onFileSelect(e.target.files[0], previewId);
+    });
+}
+
+function setupDragPreview(file, previewId) {
+    const previewDiv = document.getElementById(previewId);
+    if (file && (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg')) {
+        const reader = new FileReader();
+        reader.onload = (ev) => { previewDiv.innerHTML = `<img src="${ev.target.result}" style="width:80px; height:80px; border-radius:10px; object-fit:cover; border:2px solid var(--gold);">`; };
+        reader.readAsDataURL(file);
+    } else if (file) { alert('Please select a PNG, JPG, or JPEG image'); fileInput.value = ''; previewDiv.innerHTML = ''; }
+}
 
 function showAdminPanel() {
     const overlay = document.createElement('div');
@@ -983,7 +1024,6 @@ function showAdminPanel() {
         </div>
     `;
     document.body.appendChild(overlay);
-    
     if (!currentAdmin) {
         document.getElementById('adminContent').innerHTML = `
             <div class="form-group"><label>Admin Email</label><input type="email" id="loginEmail" value="vithanalamanisri@gmail.com"></div>
@@ -1010,246 +1050,92 @@ window.adminLogin = async () => {
 
 async function loadAdminDashboard() {
     const designs = await db.collection('tailor_designs').get();
-    const shopImgs = await db.collection('shop_images').get();
     const galleryImgs = await db.collection('shop_gallery_images').get();
     
     document.getElementById('adminContent').innerHTML = `
         <div style="background:#e8f5e9; padding:1rem; border-radius:12px; margin-bottom:1rem; text-align:center;">
-            ✅ <strong>Supports PNG, JPG, JPEG images up to 100MB!</strong> Images are automatically compressed.
+            ✅ <strong>Drag & Drop supported! Images auto-compressed.</strong>
         </div>
-        
-        <!-- SECTION 1: STITCHING GALLERY -->
         <div style="background:#FFF0F0; padding:1.2rem; border-radius:16px; margin-bottom:1.5rem; border-left:4px solid #9B2E2E;">
-            <h3 style="color:#9B2E2E;"><i class="fas fa-scissors"></i> 📍 Stitching Gallery</h3>
-            <p style="font-size:0.8rem; color:#666; margin-bottom:1rem;">Upload already stitched designs with description</p>
+            <h3><i class="fas fa-scissors"></i> Stitching Gallery</h3>
             <div class="form-group"><label>Title</label><input type="text" id="stitchedTitle" placeholder="e.g., Designer Silk Blouse"></div>
-            <div class="form-group"><label>Description</label><textarea id="stitchedDesc" rows="2" placeholder="Fabric, occasion, style details..."></textarea></div>
-            <div class="form-group"><label>Image (PNG/JPG/JPEG)</label><input type="file" id="stitchedImage" accept="image/png,image/jpeg,image/jpg"></div>
-            <div id="stitchedPreview" style="margin-bottom:0.5rem;"></div>
-            <button class="btn" onclick="uploadStitchedDesign()">📤 Publish to Stitching Gallery</button>
+            <div class="form-group"><label>Description</label><textarea id="stitchedDesc" rows="2"></textarea></div>
+            <div id="stitchedDropZone" class="drop-zone"><i class="fas fa-cloud-upload-alt"></i><p>Drag & Drop or Click to Upload</p><input type="file" id="stitchedImage" accept="image/png,image/jpeg,image/jpg" style="display:none;"></div>
+            <div id="stitchedPreview"></div>
+            <button class="btn" onclick="uploadStitchedDesign()" style="margin-top:10px;">Upload to Stitching</button>
         </div>
-        
-        <!-- SECTION 2: DESIGN REFERENCES -->
         <div style="background:#F0F5FF; padding:1.2rem; border-radius:16px; margin-bottom:1.5rem; border-left:4px solid #D4AF37;">
-            <h3 style="color:#D4AF37;"><i class="fas fa-heart"></i> 📌 Design References</h3>
-            <p style="font-size:0.8rem; color:#666; margin-bottom:1rem;">Upload reference designs that can be stitched</p>
-            <div class="form-group"><label>Title</label><input type="text" id="refTitle" placeholder="e.g., Bridal Lehenga Design"></div>
-            <div class="form-group"><label>Description</label><textarea id="refDesc" rows="2" placeholder="Design inspiration, fabric suggestions..."></textarea></div>
-            <div class="form-group"><label>Image (PNG/JPG/JPEG)</label><input type="file" id="refImage" accept="image/png,image/jpeg,image/jpg"></div>
-            <div id="refPreview" style="margin-bottom:0.5rem;"></div>
-            <button class="btn" onclick="uploadReferenceDesign()">📤 Publish to Design References</button>
+            <h3><i class="fas fa-heart"></i> Design References</h3>
+            <div class="form-group"><label>Title</label><input type="text" id="refTitle" placeholder="e.g., Bridal Lehenga"></div>
+            <div class="form-group"><label>Description</label><textarea id="refDesc" rows="2"></textarea></div>
+            <div id="refDropZone" class="drop-zone"><i class="fas fa-cloud-upload-alt"></i><p>Drag & Drop or Click to Upload</p><input type="file" id="refImage" accept="image/png,image/jpeg,image/jpg" style="display:none;"></div>
+            <div id="refPreview"></div>
+            <button class="btn" onclick="uploadReferenceDesign()" style="margin-top:10px;">Upload to References</button>
         </div>
-        
-        <!-- SECTION 3: SHOP GALLERY -->
         <div style="background:#F0FFF0; padding:1.2rem; border-radius:16px; margin-bottom:1.5rem; border-left:4px solid #2E7D32;">
-            <h3 style="color:#2E7D32;"><i class="fas fa-store"></i> 🏪 Shop Gallery</h3>
-            <p style="font-size:0.8rem; color:#666; margin-bottom:1rem;">Upload shop interior and workspace images only</p>
-            <div class="form-group"><label>Title (Optional)</label><input type="text" id="shopGalleryTitle" placeholder="e.g., Shop Interior, Workspace"></div>
-            <div class="form-group"><label>Image (PNG/JPG/JPEG)</label><input type="file" id="shopGalleryImage" accept="image/png,image/jpeg,image/jpg"></div>
-            <div id="shopGalleryPreview" style="margin-bottom:0.5rem;"></div>
-            <button class="btn" onclick="uploadShopGalleryOnly()">📤 Upload Shop Image</button>
+            <h3><i class="fas fa-store"></i> Shop Gallery</h3>
+            <div class="form-group"><label>Title</label><input type="text" id="shopGalleryTitle" placeholder="Shop View"></div>
+            <div id="shopDropZone" class="drop-zone"><i class="fas fa-cloud-upload-alt"></i><p>Drag & Drop or Click to Upload</p><input type="file" id="shopGalleryImage" accept="image/png,image/jpeg,image/jpg" style="display:none;"></div>
+            <div id="shopGalleryPreview"></div>
+            <button class="btn" onclick="uploadShopGalleryOnly()" style="margin-top:10px;">Upload Shop Image</button>
         </div>
-        
-        <hr style="margin:1rem 0;">
-        
-        <h3>📋 Existing Stitching Designs (${designs.docs.filter(d => d.data().type === 'stitched').length})</h3>
-        <div id="stitchedList"></div>
-        
-        <hr style="margin:1rem 0;">
-        
-        <h3>📋 Existing Reference Designs (${designs.docs.filter(d => d.data().type === 'reference').length})</h3>
-        <div id="referenceList"></div>
-        
-        <hr style="margin:1rem 0;">
-        
-        <h3>🏪 Shop Gallery Images (${galleryImgs.size})</h3>
-        <div id="shopGalleryList"></div>
-        
+        <hr><h3>Existing Stitching (${designs.docs.filter(d => d.data().type === 'stitched').length})</h3><div id="stitchedList"></div>
+        <hr><h3>Existing References (${designs.docs.filter(d => d.data().type === 'reference').length})</h3><div id="referenceList"></div>
+        <hr><h3>Shop Gallery Images (${galleryImgs.size})</h3><div id="shopGalleryList"></div>
         <button class="btn btn-danger" onclick="logoutAdmin()" style="margin-top:1rem; width:100%;">Logout</button>
     `;
     
-    // Setup preview for each section
-    setupPreview('stitchedImage', 'stitchedPreview');
-    setupPreview('refImage', 'refPreview');
-    setupPreview('shopGalleryImage', 'shopGalleryPreview');
+    createDragDropZone('stitchedDropZone', 'stitchedImage', 'stitchedPreview', (f, p) => setupDragPreview(f, p));
+    createDragDropZone('refDropZone', 'refImage', 'refPreview', (f, p) => setupDragPreview(f, p));
+    createDragDropZone('shopDropZone', 'shopGalleryImage', 'shopGalleryPreview', (f, p) => setupDragPreview(f, p));
     
-    // Display existing stitching designs
     const stitchedItems = designs.docs.filter(d => d.data().type === 'stitched');
-    document.getElementById('stitchedList').innerHTML = stitchedItems.map(doc => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
-            <div><strong>${escapeHtml(doc.data().title)}</strong><br><small>${escapeHtml(doc.data().description?.substring(0,50))}...</small></div>
-            <button class="btn-danger" onclick="deleteDesign('${doc.id}')" style="padding:4px 12px;">Delete</button>
-        </div>
-    `).join('');
-    
-    // Display existing reference designs
+    document.getElementById('stitchedList').innerHTML = stitchedItems.map(doc => `<div style="display:flex; justify-content:space-between; padding:0.5rem; border-bottom:1px solid #eee;"><div><strong>${escapeHtml(doc.data().title)}</strong><br><small>${escapeHtml(doc.data().description?.substring(0,50))}</small></div><button onclick="deleteDesign('${doc.id}')" style="background:#8B3A3A; color:white; border:none; padding:4px 12px; border-radius:20px;">Delete</button></div>`).join('');
     const refItems = designs.docs.filter(d => d.data().type === 'reference');
-    document.getElementById('referenceList').innerHTML = refItems.map(doc => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
-            <div><strong>${escapeHtml(doc.data().title)}</strong><br><small>${escapeHtml(doc.data().description?.substring(0,50))}...</small></div>
-            <button class="btn-danger" onclick="deleteDesign('${doc.id}')" style="padding:4px 12px;">Delete</button>
-        </div>
-    `).join('');
-    
-    // Display existing shop gallery images
-    document.getElementById('shopGalleryList').innerHTML = galleryImgs.docs.map(doc => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;">
-            <img src="${doc.data().imageData}" width="50" height="50" style="border-radius:10px; object-fit:cover;">
-            <span>${escapeHtml(doc.data().title || 'Shop View')}</span>
-            <button class="btn-danger" onclick="deleteGalleryImage('${doc.id}')" style="padding:4px 12px;">Delete</button>
-        </div>
-    `).join('');
+    document.getElementById('referenceList').innerHTML = refItems.map(doc => `<div style="display:flex; justify-content:space-between; padding:0.5rem; border-bottom:1px solid #eee;"><div><strong>${escapeHtml(doc.data().title)}</strong><br><small>${escapeHtml(doc.data().description?.substring(0,50))}</small></div><button onclick="deleteDesign('${doc.id}')" style="background:#8B3A3A; color:white; border:none; padding:4px 12px; border-radius:20px;">Delete</button></div>`).join('');
+    document.getElementById('shopGalleryList').innerHTML = galleryImgs.docs.map(doc => `<div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #eee;"><img src="${doc.data().imageData}" width="40" height="40" style="border-radius:8px;"><span>${escapeHtml(doc.data().title)}</span><button onclick="deleteGalleryImage('${doc.id}')" style="background:#8B3A3A; color:white; border:none; padding:4px 12px; border-radius:20px;">Delete</button></div>`).join('');
 }
 
-function setupPreview(inputId, previewId) {
-    const input = document.getElementById(inputId);
-    const previewDiv = document.getElementById(previewId);
-    if (input && previewDiv) {
-        input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file && (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg')) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    previewDiv.innerHTML = `<img src="${event.target.result}" style="width:80px; height:80px; border-radius:10px; object-fit:cover; border:2px solid var(--gold);">`;
-                };
-                reader.readAsDataURL(file);
-            } else if (file) {
-                alert('Please select a PNG, JPG, or JPEG image file');
-                input.value = '';
-                previewDiv.innerHTML = '';
-            }
-        };
-    }
-}
-
-// Upload to Stitching Gallery
 window.uploadStitchedDesign = async function() {
     const title = document.getElementById('stitchedTitle').value.trim();
-    const description = document.getElementById('stitchedDesc').value.trim();
+    const desc = document.getElementById('stitchedDesc').value.trim();
     const file = document.getElementById('stitchedImage').files[0];
-    
-    if(!title || !description || !file) {
-        alert('Please fill title, description and select an image');
-        return;
-    }
-    
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
-        alert('Only PNG, JPG, and JPEG images are allowed');
-        return;
-    }
-    
-    const btn = event.target;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-    
+    if(!title || !desc || !file) { alert('Fill all fields and select image'); return; }
+    const btn = event.target; btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
     try {
-        const compressedImage = await compressImage(file, 1200, 0.8);
-        await db.collection('tailor_designs').add({ 
-            title, description, type: 'stitched', imageData: compressedImage, 
-            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-        });
-        alert('✅ Design added to Stitching Gallery!');
-        document.getElementById('stitchedTitle').value = '';
-        document.getElementById('stitchedDesc').value = '';
-        document.getElementById('stitchedImage').value = '';
-        document.getElementById('stitchedPreview').innerHTML = '';
-        await loadDesigns();
-        loadAdminDashboard();
-    } catch(error) {
-        alert('❌ Failed: ' + error.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '📤 Publish to Stitching Gallery';
-    }
+        const compressed = await compressImage(file, 1200, 0.8);
+        await db.collection('tailor_designs').add({ title, description: desc, type: 'stitched', imageData: compressed, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+        alert('Added!'); location.reload();
+    } catch(e) { alert('Error: '+e.message); } finally { btn.disabled = false; }
 };
-
-// Upload to Design References
 window.uploadReferenceDesign = async function() {
     const title = document.getElementById('refTitle').value.trim();
-    const description = document.getElementById('refDesc').value.trim();
+    const desc = document.getElementById('refDesc').value.trim();
     const file = document.getElementById('refImage').files[0];
-    
-    if(!title || !description || !file) {
-        alert('Please fill title, description and select an image');
-        return;
-    }
-    
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
-        alert('Only PNG, JPG, and JPEG images are allowed');
-        return;
-    }
-    
-    const btn = event.target;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-    
+    if(!title || !desc || !file) { alert('Fill all fields'); return; }
+    const btn = event.target; btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
     try {
-        const compressedImage = await compressImage(file, 1200, 0.8);
-        await db.collection('tailor_designs').add({ 
-            title, description, type: 'reference', imageData: compressedImage, 
-            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-        });
-        alert('✅ Design added to Design References!');
-        document.getElementById('refTitle').value = '';
-        document.getElementById('refDesc').value = '';
-        document.getElementById('refImage').value = '';
-        document.getElementById('refPreview').innerHTML = '';
-        await loadDesigns();
-        loadAdminDashboard();
-    } catch(error) {
-        alert('❌ Failed: ' + error.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '📤 Publish to Design References';
-    }
+        const compressed = await compressImage(file, 1200, 0.8);
+        await db.collection('tailor_designs').add({ title, description: desc, type: 'reference', imageData: compressed, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+        alert('Added!'); location.reload();
+    } catch(e) { alert('Error'); } finally { btn.disabled = false; }
 };
-
-// Upload to Shop Gallery (images only)
 window.uploadShopGalleryOnly = async function() {
     const title = document.getElementById('shopGalleryTitle').value.trim() || 'Shop View';
     const file = document.getElementById('shopGalleryImage').files[0];
-    
-    if(!file) {
-        alert('Please select an image');
-        return;
-    }
-    
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
-        alert('Only PNG, JPG, and JPEG images are allowed');
-        return;
-    }
-    
-    const btn = event.target;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-    
+    if(!file) { alert('Select image'); return; }
+    const btn = event.target; btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
     try {
-        const compressedImage = await compressImage(file, 1000, 0.75);
-        await db.collection('shop_gallery_images').add({ imageData: compressedImage, title: title, timestamp: new Date() });
-        alert('✅ Shop image added to Gallery!');
-        document.getElementById('shopGalleryImage').value = '';
-        document.getElementById('shopGalleryTitle').value = '';
-        document.getElementById('shopGalleryPreview').innerHTML = '';
-        await loadShopGalleryImages();
-        loadAdminDashboard();
-    } catch(error) {
-        alert('❌ Failed: ' + error.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '📤 Upload Shop Image';
-    }
+        const compressed = await compressImage(file, 1000, 0.75);
+        await db.collection('shop_gallery_images').add({ imageData: compressed, title, timestamp: new Date() });
+        alert('Shop image added!'); location.reload();
+    } catch(e) { alert('Error'); } finally { btn.disabled = false; }
 };
-
-window.deleteDesign = async (id) => { if(confirm('Delete?')) { await db.collection('tailor_designs').doc(id).delete(); alert('Deleted'); location.reload(); } };
-window.deleteShopImage = async (id) => { if(confirm('Delete?')) { await db.collection('shop_images').doc(id).delete(); alert('Deleted'); location.reload(); } };
-window.deleteGalleryImage = async (id) => { if(confirm('Delete?')) { await db.collection('shop_gallery_images').doc(id).delete(); alert('Deleted'); location.reload(); } };
+window.deleteDesign = async (id) => { if(confirm('Delete?')) { await db.collection('tailor_designs').doc(id).delete(); location.reload(); } };
+window.deleteGalleryImage = async (id) => { if(confirm('Delete?')) { await db.collection('shop_gallery_images').doc(id).delete(); location.reload(); } };
 window.logoutAdmin = async () => { await auth.signOut(); currentAdmin = false; location.reload(); };
-
 auth.onAuthStateChanged(user => { currentAdmin = !!(user && user.email === 'vithanalamanisri@gmail.com'); });
-loadDesigns();
-loadShopImages();
-loadShopGalleryImages();
-navigateTo('home');
+loadDesigns(); loadShopImages(); loadShopGalleryImages(); navigateTo('home');
 </script>
 </body>
 </html>
